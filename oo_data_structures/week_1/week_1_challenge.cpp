@@ -1,7 +1,13 @@
-// You should define Pair here:
-// (Use as many lines as you need!)
-// ...
-// ...
+class Pair {
+  public:
+    int a;
+    int b;
+    int sum();
+};
+
+int Pair::sum() {
+  return a + b;
+}
 
 // This main() function will help you test your work.
 // Click Run to see what happens.
