@@ -84,9 +84,7 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
         yAbsDist = abs(yDist);
         
         double euclideanDist = sqrt(xAbsDist*xAbsDist + yAbsDist*yAbsDist);
-        if (euclideanDist > 160) {
-          euclideanDist = 160;
-        }
+        euclideanDist = euclideanDist > 160 ? 160 : euclideanDist;
         double luminanceFactor = (euclideanDist / 2) / 100;
         
         pixel.l = pixel.l * (1 - luminanceFactor);
