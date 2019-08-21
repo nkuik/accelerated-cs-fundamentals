@@ -111,6 +111,26 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
  * @return The illinify'd image.
 **/
 PNG illinify(PNG image) {
+
+  for (unsigned x = 0; x < image.width(); x++) {
+    for (unsigned y = 0; y < image.height(); y++) {
+      HSLAPixel & pixel = image.getPixel(x, y);
+      
+      unsigned blue = 216;
+      unsigned orange = 11;
+      
+      if (pixel.h > 293) {
+        pixel.h = orange;
+      }
+      else {
+        double distFromBlue = blue - pixel.h;
+        double distFromOrange = orange - pixel.h;
+        
+        pixel.h = abs(distFromBlue) < abs(distFromOrange) ? blue : orange; 
+      }
+    }
+  }
+  
   return image;
 }
  
