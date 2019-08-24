@@ -80,14 +80,11 @@
 
 template <typename T>
 void LinkedList<T>::insertOrdered(const T& newData) {
-  // If head is empty, push data to the back of the list
-  std::cout << "New data is: " << newData << std::endl;
-  
   Node *thru = getHeadPtr();
   Node *end = getTailPtr();
 
   if (!thru || newData > end->data) {
-      pushBack(newData);
+    pushBack(newData);
   }
   else if (newData < thru->data) {
     pushFront(newData);
@@ -95,15 +92,9 @@ void LinkedList<T>::insertOrdered(const T& newData) {
   else {
     while (newData > thru->data) {
       thru = thru->next;
-      std::cout << "Thru in loop's data is: " << thru->data << std::endl;
-      std::cout << std::endl;
     }
     Node* newNode = new Node(newData);
-    std::cout << "Thru out of loop's data is: " << thru->data << std::endl;
-    std::cout << "New nodes data is: " << (newNode->data) << std::endl;
-    std::cout << std::endl;
-    std::cout << std::endl;
-    
+
     newNode->next = thru;
     newNode->prev = thru->prev;
     (thru->prev)->next = newNode;
@@ -111,20 +102,6 @@ void LinkedList<T>::insertOrdered(const T& newData) {
     
     size_++;
   }
-  // if next null, add to back
-  
-  // -----------------------------------------------------------
-  // TODO: Your code here!
-  // -----------------------------------------------------------
-  // Please implement this function according to the description
-  // above and in the instructions PDF.
-
-  // Hints:
-  // Make your new node on the heap and then find where it needs to
-  // go in the list. Update any pointers that should refer to your new
-  // node, and make sure your node refers back with its own pointers.
-  // Don't forget to update the list size.
-
 }
 
 /********************************************************************
