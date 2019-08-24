@@ -80,7 +80,39 @@
 
 template <typename T>
 void LinkedList<T>::insertOrdered(const T& newData) {
+  // If head is empty, push data to the back of the list
+  std::cout << "New data is: " << newData << std::endl;
+  
+  Node *thru = getHeadPtr();
+  Node *end = getTailPtr();
 
+  if (!thru || newData > end->data) {
+      pushBack(newData);
+  }
+  else if (newData < thru->data) {
+    pushFront(newData);
+  }
+  else {
+    while (newData > thru->data) {
+      thru = thru->next;
+      std::cout << "Thru in loop's data is: " << thru->data << std::endl;
+      std::cout << std::endl;
+    }
+    Node* newNode = new Node(newData);
+    std::cout << "Thru out of loop's data is: " << thru->data << std::endl;
+    std::cout << "New nodes data is: " << (newNode->data) << std::endl;
+    std::cout << std::endl;
+    std::cout << std::endl;
+    
+    newNode->next = thru;
+    newNode->prev = thru->prev;
+    (thru->prev)->next = newNode;
+    thru->prev = newNode;
+    
+    size_++;
+  }
+  // if next null, add to back
+  
   // -----------------------------------------------------------
   // TODO: Your code here!
   // -----------------------------------------------------------
