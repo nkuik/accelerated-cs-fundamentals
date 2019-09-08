@@ -172,23 +172,30 @@ LinkedList<T> LinkedList<T>::merge(const LinkedList<T>& other) const {
   // list is also marked const. However, if you wish, you can make some
   // "working copies" of the two input lists like this, and then edit
   // the copies as needed:
+
+  LinkedList<T> merged;
   LinkedList<T> left = *this;
   LinkedList<T> right = other;
-  // You need to create and return a new list for the merged result.
-  LinkedList<T> merged;
 
-  // -----------------------------------------------------------
-  // TODO: Your code here!
-  // -----------------------------------------------------------
-  // Please implement this function according to the description
-  // above and in the instructions PDF.
+  if (left.empty() || right.empty()) {
+  }
+  
+  if (left.empty()) {
+    return right;
+  }
+  
+  if (right.empty()) {
+    return left;
+  }
 
-  // Hint:
-  // Assuming that the left and right lists are already sorted,
-  // which list items currently contain the candidates for the first
-  // item in the merged list?
-  // Think of what needs to be placed in the merged list first. Then,
-  // think about what should come after that. (And so on.)
+  while (!left.empty()) {
+    merged.pushBack(left.getHeadPtr()->data);
+    left.popFront();
+  }
+  while (!right.empty()) {
+    merged.insertOrdered(right.getHeadPtr()->data);
+    right.popFront();
+  }
 
   return merged;
 }
