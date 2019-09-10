@@ -311,6 +311,21 @@ int countNullChildrenIterative(N* subtreeRoot) {
 // and records copies of the data found, in order, in a std::vector,
 // which should then be returned.
 template <typename T>
+std::queue<T*> recursiveTraversal(T* subtreeRoot) {
+
+  std::queue<T*> results;
+  results.push(subtreeRoot);
+  // Iterate over the list of children and recurse on each subtree.
+  for (auto childPtr : subtreeRoot->childrenPtrs) {
+    // Increment the sum by the result of recursing on this child's subtree.
+    recursiveTraversal(childPtr);
+  }
+
+  return results;
+}
+
+
+template <typename T>
 std::vector<T> traverseLevels(GenericTree<T>& tree) {
 
   // This defines a type alias for the appropriate TreeNode dependent type.
@@ -323,20 +338,59 @@ std::vector<T> traverseLevels(GenericTree<T>& tree) {
   // This is the results vector you need to fill.
   std::vector<T> results;
 
-  auto rootNodePtr = tree.getRootPtr();
+  TreeNode* rootNodePtr = tree.getRootPtr();
   if (!rootNodePtr) return results;
+  
+  results.push_back(rootNodePtr->data);
 
-  //      *****************************************************
-  //                           EXERCISE 2
-  //    TODO: Your work here! You should edit this function body!
-  //      *****************************************************
+  std::queue<TreeNode*> nodesToExplore;
+  std::queue<TreeNode*> nodesToPush;
+  
+  nodesToExplore.push(rootNodePtr);
+  
+  while (!nodesToExplore.empty()) {
 
-  // Perform a level-order traversal and record the data of the nodes in
-  // the results vector. They should be placed in the vector in level order.
-  // Remember that you can add a copy of an item to the back of a std::vector
-  // with the .push_back() member function.
+    // Make a copy of the front pointer on the queue, then pop it to decrease the queue
+    TreeNode* frontNode = nodesToExplore.front();
+    nodesToExplore.pop();
 
-  // ...
+    if (!frontNode) {
+      // The front node pointer should not be null, because we're designing this
+      // function so that no null pointers should ever get pushed onto the exploration queue.
+      throw std::runtime_error("Error: Compression exploration queued a null pointer");
+    }
+
+    // If the node exists, it may have children pointers. Let's make
+    // an empty vector of children node pointers and get ready to make
+    // a compressed copy of this node's children pointers.
+    std::vector<TreeNode*> compressedChildrenPtrs;
+    // Now loop through the currently recorded children pointers...
+    for (auto childPtr : frontNode->childrenPtrs) {
+      if (childPtr) {
+        // If this child pointer is not null, then push it onto the back
+        // of our new, compressed pointers vector.
+        compressedChildrenPtrs.push_back(childPtr);
+        // Also put this child pointer onto the end of the exploration queue.
+        nodesToExplore.push(childPtr);
+        nodesToPush.push(childPtr);
+      }
+    }
+
+    // Here's a little trick: the std::vector::swap() function lets us replace
+    // the node's actual children pointer vector with the new one, even
+    // though the compressed one is a local variable here. The standard
+    // template library swaps the internals of the two structures so that
+    // the old one expires here at local scope, while the new one lives on
+    // with our node.
+    frontNode->childrenPtrs.swap(compressedChildrenPtrs);
+  }
+  
+  // auto recursedTraversed = recursiveTraversal(rootNodePtr);
+
+  while (!nodesToPush.empty()) {
+    results.push_back(nodesToPush.front()->data);
+    nodesToPush.pop();
+  }
 
   return results;
 }
