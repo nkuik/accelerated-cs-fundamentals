@@ -106,10 +106,11 @@ StringIntMap makeWordCounts(const StringVec& words) {
 int lookupWithFallback(const StringIntMap& wordcount_map, const std::string& key, int fallbackVal) {
   auto it = wordcount_map.find(key);
   if (it == wordcount_map.end()) {
-    // word not found, need to add it with first sighting
+    // word not found, return fallback value
     return fallbackVal;
   }
   else {
+    // found, actually return found value--not key
     return it->second; 
   }
 }
@@ -224,7 +225,8 @@ int memoizedLongestPalindromeLength(LengthMemo& memo, const std::string& str, in
     // new in this case. So, we also won't store anything new in the table in
     // this case, only return what's already stored at this key in the map.
 
-    return -1337; // Hint: You need to change this!
+    auto it = memo.find(pairKey);
+    return it->second;
     // ====================================================================
 
   }
@@ -233,7 +235,8 @@ int memoizedLongestPalindromeLength(LengthMemo& memo, const std::string& str, in
   // then we're solving this subproblem for the first time.
   // Below, we'll record our result to make sure we don't have to solve it again.
 
-  // Base case: Return 0 as the longest palindrome length when the indices cross.
+  // Base case: Return 0 as the longest palindrome length when the indices cross,
+  // because there is no palindrome.
   // This case could be triggered during our recursive steps defined below.
   if (leftLimit > rightLimit) {
     // Since this case already returns in constant time (that is, O(1) time)
@@ -329,9 +332,8 @@ int memoizedLongestPalindromeLength(LengthMemo& memo, const std::string& str, in
   int greaterResult = std::max(leftSubproblemResult,rightSubproblemResult);
 
   // =======================================================================
-  // EXERCISE 3 - PART B - YOUR CODE HERE!
-  //
-  return -1337; // Hint: You need to change this!
+  memo[pairKey] = greaterResult;
+  return greaterResult;
   // =======================================================================
 }
 
