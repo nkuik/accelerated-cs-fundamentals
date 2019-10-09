@@ -319,16 +319,14 @@ std::list<IntPair> graphBFS(const IntPair& start, const IntPair& goal, const Gri
     // TODO: Your code here!
     // We'll need to loop over the neighbors that are the points adjacent to curPoint.
     // Get a copy of the set of neighbors we're going to loop over.
-    GridGraph::NeighborSet neighbors; // Change this...
-    // =====================================================================
-
+    const GridGraph::NeighborSet neighbors = graph.adjacencyMap.at(curPoint);
+ 
     for (auto neighbor : neighbors) {
 
       // ==================================================================
       // TODO: Your code here!
       // Check whether the neighbor has already been visited.
-      bool neighborWasAlreadyVisited = false; // Change this...
-      // ==================================================================
+      bool neighborWasAlreadyVisited = visitedSet.find(neighbor) != visitedSet.end() ? true : false;
 
       // If this adjacent vertex has NOT been visited before, we will visit it now.
       // If it HAS been visited before, we do nothing and continue to loop.
@@ -337,17 +335,18 @@ std::list<IntPair> graphBFS(const IntPair& start, const IntPair& goal, const Gri
 
         // ================================================================
         // TODO: Your code here!
+        pred[neighbor] = curPoint;
 
         // Record that the curPoint is the predecessor of the neighbor point,
         // since curPoint has just led to the discovery of this neighbor for
         // the first time.
         // ...
-
         // Add neighbor to the visited set.
-        // ...
-
+        visitedSet.insert(neighbor);
+        
         // Push neighbor into the exploration queue.
         // ...
+        exploreQ.push(neighbor);
 
         // ================================================================
 
@@ -535,18 +534,16 @@ std::list<PuzzleState> puzzleBFS(const PuzzleState& start, const PuzzleState& go
     // We'll need to loop over the neighbors that are the points adjacent to curState.
     // We need a collection of neighbors we're going to loop over.
     
-    auto neighbors = {start}; // Change this! This line is totally wrong.
-
-    // Hint: Look at PuzzleState.h
-    // =====================================================================
+    auto neighbors = curState.getAdjacentStates();
 
     for (auto neighbor : neighbors) {
 
       // ==================================================================
       // TODO: Your code here!
       // Check whether the neighbor has already been visited.
-      bool neighborWasAlreadyVisited = false; // Change this...
-      // ==================================================================
+      
+      bool neighborWasAlreadyVisited = visitedSet.find(neighbor) != visitedSet.end() ? true : false;
+
 
       if (!neighborWasAlreadyVisited) {
 
@@ -557,13 +554,15 @@ std::list<PuzzleState> puzzleBFS(const PuzzleState& start, const PuzzleState& go
         // since curState has just led to the discovery of this neighbor for
         // the first time.
         // ...
+        pred[neighbor] = curState;
+
 
         // Add neighbor to the visited set.
-        // ...
-
+        visitedSet.insert(neighbor);
+        
         // Push neighbor into the exploration queue.
         // ...
-
+        exploreQ.push(neighbor);
         // ================================================================
 
         dist[neighbor] = dist[curState]+1;
